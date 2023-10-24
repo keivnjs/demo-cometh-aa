@@ -27,8 +27,9 @@ export function useWalletAuth() {
   const [connectionError, setConnectionError] = useState<string | null>(null);
 
   const apiKey = process.env.NEXT_PUBLIC_COMETH_API_KEY!;
-  const COUNTER_CONTRACT_ADDRESS = "0x3633A1bE570fBD902D10aC6ADd65BB11FC914624"; // mumbai
-  // "0x0f743cDc229303b52F716bc6C2670dAC2976C256"; //Fuji
+  const COUNTER_CONTRACT_ADDRESS =
+    // "0x3633A1bE570fBD902D10aC6ADd65BB11FC914624"; // mumbai
+    "0x0f743cDc229303b52F716bc6C2670dAC2976C256"; //Fuji
   // "0x66fD376C36f63F1BFe22D224AcAB25B5425485CB"; // mumbai
 
   function displayError(message: string) {
@@ -39,7 +40,7 @@ export function useWalletAuth() {
     setIsConnecting(true);
     try {
       const walletAdaptor = new ConnectAdaptor({
-        chainId: SupportedNetworks.MUMBAI,
+        chainId: SupportedNetworks.FUJI,
         apiKey,
       });
 
@@ -75,6 +76,7 @@ export function useWalletAuth() {
 
         const register = await useWebAuthn(
           "a20623ef-f95b-47e9-ac6a-9b432ac4c332",
+          // "f2dd896b-070e-4531-b3d6-474f1acfb988",
           requestData
         );
       }

@@ -6,7 +6,13 @@ import React, { useEffect, useState } from "react";
 import { useWalletAuth } from "../modules/wallet/hooks/useWalletAuth";
 import Alert from "../lib/ui/components/Alert";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { RelayTransactionResponse } from "@cometh/connect-sdk";
+import {
+  ComethProvider,
+  ComethWallet,
+  ConnectAdaptor,
+  SupportedNetworks,
+  RelayTransactionResponse,
+} from "@cometh/connect-sdk";
 import { useWindowSize } from "../lib/ui/hooks/useWindowSize";
 import Confetti from "react-confetti";
 
@@ -56,28 +62,59 @@ export function Transaction({
   useEffect(() => {
     if (wallet) {
       (async () => {
-        const balance = await counterContract!.counters(wallet.getAddress());
-        setNftBalance(Number(balance));
+        const balance1 = await counterContract!.counters(wallet.getAddress());
+        console.log(balance1);
+        setNftBalance(Number(balance1));
       })();
     }
   }, []);
 
   const sendTestTransaction = async () => {
-    setTransactionSended(null);
-    setTransactionResponse(null);
-    setTransactionFailure(false);
-    setTransactionSuccess(false);
+    // setTransactionSended(null);
+    // setTransactionResponse(null);
+    // setTransactionFailure(false);
+    // setTransactionSuccess(false);
 
     setIsTransactionLoading(true);
     try {
       if (!wallet) throw new Error("No wallet instance");
 
+      console.log("begin send tx 1");
       const tx: RelayTransactionResponse = await counterContract!.count();
       setTransactionSended(tx);
 
       const txResponse = await tx.wait();
+      console.log("tx 1", txResponse);
+      console.log("after wait first tx");
 
       const balance = await counterContract!.counters(wallet.getAddress());
+
+      // console.log("begin instantiate wallet fuji");
+      // const walletAdaptor = new ConnectAdaptor({
+      //   chainId: SupportedNetworks.FUJI,
+      //   apiKey: "a20623ef-f95b-47e9-ac6a-9b432ac4c332",
+      // });
+
+      // console.log("prepare send to fuji");
+
+      // // send to fuji
+      // const instance = new ComethWallet({
+      //   authAdapter: walletAdaptor,
+      //   apiKey: "a20623ef-f95b-47e9-ac6a-9b432ac4c332",
+      //   rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
+      // });
+
+      // await instance.connect(wallet.getAddress());
+
+      // const txValues = {
+      //   to: "0x0f743cDc229303b52F716bc6C2670dAC2976C256",
+      //   value: "0x00",
+      //   data: "0x06661abd",
+      // };
+      // await instance.sendTransaction(txValues);
+
+      // console.log("sent to fuji");
+
       setNftBalance(Number(balance));
 
       setTransactionResponse(txResponse);
